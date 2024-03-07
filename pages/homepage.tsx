@@ -3,6 +3,10 @@ import Navbar from "../components/Navbar";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 interface Series {
   id: number;
   images: {
@@ -12,7 +16,7 @@ interface Series {
   title: string;
 }
 
-const SERIES_PER_PAGE = 9;
+const SERIES_PER_PAGE = 100;
 
 function Homepage() {
   const [seriesList, setSeriesList] = useState<Series[]>([]);
@@ -46,6 +50,15 @@ function Homepage() {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
+  const settings = {
+    dots: true,
+    speed: 2000,
+    slidesToShow: 9,
+    slidesToScroll: 9,
+    
+   
+  };
+
   return (
     <Box className="min-h-screen flex flex-col optima" bg={"brand.bg"}>
       <Navbar />
@@ -61,47 +74,29 @@ function Homepage() {
         Séries populaires
       </Heading>
 
-      <Grid
-        templateColumns="repeat(auto-fill, minmax(150px, 1fr))"
-        gap={4}
-        p={4}
-        justifyContent="center"
-      >
-        {currentSeries.map((series) => (
-          <Box
-            key={series.id}
-            className="flex flex-col items-center justify-center"
-          >
-            <Link href={`/series/${series.id}`} textDecoration="none">
-              <Image
-                src={series.images.poster || ""}
-                alt={series.title}
-                w="100%"
-                h="auto"
-                maxH="300px" // Ajustez la hauteur maximale selon vos besoins
-                borderRadius="md"
-                transition="transform 0.2s"
-                _hover={{ transform: "scale(1.05)" }}
-              />
-            </Link>
-          </Box>
-        ))}
-      </Grid>
-
-      <Box mt={4} textAlign="center">
-        <Button
-          onClick={() => paginate(currentPage - 1)}
-          isDisabled={currentPage === 1}
-          mr={2}
-        >
-          Précédent
-        </Button>
-        <Button
-          onClick={() => paginate(currentPage + 1)}
-          isDisabled={currentSeries.length < SERIES_PER_PAGE}
-        >
-          Suivant
-        </Button>
+      <Box width="90vw" mx={"auto"}>
+        <Slider {...settings}>
+          {currentSeries.map((series) => (
+            <Box
+              key={series.id}
+              className="flex flex-col items-center justify-center"
+            >
+              <Link href={`/series/${series.id}`} textDecoration="none">
+                <Image
+                  src={series.images.poster || ""}
+                  alt={series.title}
+                  w="90%"
+                  h="auto"
+                  maxH="600px" // Ajustez la hauteur maximale selon vos besoins
+                  borderRadius="md"
+                  transition="transform 0.2s"
+                  _hover={{ transform: "scale(1.05)" }}
+                  m={2}
+                />
+              </Link>
+            </Box>
+          ))}
+        </Slider>
       </Box>
     </Box>
   );
