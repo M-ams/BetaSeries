@@ -34,11 +34,11 @@ function SeriesWithNumber({
   index: number;
 }) {
   const right =
-    index < 9 ? ["45%", "45%", "40%", "40%"] : ["45%", "40%", "40%", "40%"];
+    index < 9 ? ["35%", "45%", "40%", "40%"] : ["44%", "40%", "40%", "40%"];
   const fontSize =
     index < 9
-      ? ["35vw", "25vw", "20vw", "16vw"]
-      : ["26vw", "17vw", "13vw", "11vw"];
+      ? ["40vw", "25vw", "20vw", "16vw"]
+      : ["20vw", "17vw", "13vw", "11vw"];
   const bottom =
     index < 9 ? ["-20%", "-30%", "", "-40%"] : ["_20%", "", "", "-15%"];
 
@@ -66,7 +66,7 @@ function SeriesWithNumber({
           <Image
             src={series.images.poster || ""}
             alt={series.title}
-            w="50%"
+            w={["65%", "50%", "55%", "50%"]}
             h="auto"
             maxH="600px"
             borderRadius="md"
@@ -156,10 +156,10 @@ function Homepage() {
         mx={"auto"}
         className="cssanimation sequence fadeInBottom"
       >
-        Top 10 series
+        Trending
       </Heading>
 
-      <Box width="90vw" m={"auto"} mt={"5vh"}>
+      <Box width={["80vw", "80vw", "90vw", "90vw"]} m={"auto"} mt={"5vh"}>
         <Slider {...settings}>
           {currentSeries.map((series, index) => (
             <SeriesWithNumber key={series.id} series={series} index={index} />
