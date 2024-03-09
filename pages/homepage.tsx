@@ -33,7 +33,14 @@ function SeriesWithNumber({
   series: Series;
   index: number;
 }) {
-  const right = index < 9 ? "40%" : "3%";
+  const right =
+    index < 9 ? ["45%", "45%", "40%", "40%"] : ["45%", "40%", "40%", "40%"];
+  const fontSize =
+    index < 9
+      ? ["35vw", "25vw", "20vw", "16vw"]
+      : ["26vw", "17vw", "13vw", "11vw"];
+  const bottom =
+    index < 9 ? ["-20%", "-30%", "", "-40%"] : ["_20%", "", "", "-15%"];
 
   return (
     <Flex
@@ -45,11 +52,11 @@ function SeriesWithNumber({
       <Box
         color="white"
         fontWeight="bold"
-        fontSize="250px"
+        fontSize={fontSize}
         zIndex={0}
         position="absolute"
         right={right}
-        bottom={"-40%"}
+        bottom={bottom}
         fontStyle={"bold"}
       >
         {index + 1}
@@ -112,6 +119,29 @@ function Homepage() {
     slidesToShow: 5,
     slidesToScroll: 5,
     infinite: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 4,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+        },
+      },
+    ],
   };
 
   return (
@@ -126,11 +156,11 @@ function Homepage() {
         mx={"auto"}
         className="cssanimation sequence fadeInBottom"
       >
-        Séries populaires
+        Top 10 series
       </Heading>
 
       <Box width="90vw" m={"auto"} mt={"5vh"}>
-        <Slider className="mt-[vh]" {...settings}>
+        <Slider {...settings}>
           {currentSeries.map((series, index) => (
             <SeriesWithNumber key={series.id} series={series} index={index} />
           ))}
