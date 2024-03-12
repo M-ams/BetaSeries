@@ -24,6 +24,16 @@ interface Series {
   title: string;
 }
 
+interface Movie {
+  poster: string;
+  backdrop: string | null;
+  id: number;
+  images: {
+    show: string | null;
+    poster: string | null;
+  };
+  title: string;
+}
 const SERIES_PER_PAGE = 10;
 
 function SeriesWithNumber({
@@ -80,9 +90,10 @@ function SeriesWithNumber({
   );
 }
 
-function Homepage() {
+function Homepage(): JSX.Element {
   const [seriesList, setSeriesList] = useState<Series[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [randomMovie, setRandomMovie] = useState<Movie[]>([]);
 
   useEffect(() => {
     const fetchSeries = async () => {
@@ -104,6 +115,28 @@ function Homepage() {
 
     // Appelle la fonction de récupération des séries
     fetchSeries();
+  }, []);
+
+  useEffect(() => {
+    const fetchRandomMovie = async () => {
+      try {
+        // Remplacez "VOTRE_CLE_API" par votre clé d'API BetaSeries
+        const apiKey = "f7ea5278f03f";
+        const apiUrl = `https://api.betaseries.com/movies/random?key=${apiKey}`;
+
+        const response = await axios.get(apiUrl);
+        const data = response.data;
+
+        // Met à jour le state avec la liste des séries
+        setRandomMovie(data.movies);
+        console.log(data.movies);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des séries :", error);
+      }
+    };
+
+    // Appelle la fonction de récupération des séries
+    fetchRandomMovie();
   }, []);
 
   const indexOfLastSeries = currentPage * SERIES_PER_PAGE;
@@ -156,16 +189,36 @@ function Homepage() {
         mx={"auto"}
         className="cssanimation sequence fadeInBottom"
       >
-        Trending
+        Discover
       </Heading>
 
-      <Box width={["80vw", "80vw", "90vw", "90vw"]} m={"auto"} mt={"5vh"}>
-        <Slider {...settings}>
-          {currentSeries.map((series, index) => (
-            <SeriesWithNumber key={series.id} series={series} index={index} />
-          ))}
-        </Slider>
+      <Box m={"auto"} mt={"5vh"} className="cssanimation sequence fadeInBottom">
+        <Link href={`/movies/${randomMovie[0]?.id}`} textDecoration="none">
+        <Image src={randomMovie[0]?.poster} alt="" borderRadius="lg"
+          w={"auto"}
+          h={["40vh", "40vh", "50vh", "50vh"]}
+          objectFit="cover"
+          boxShadow="xl"
+          _hover={{ transform: "scale(1.05)" }}
+          transition="transform 0.2s ease-in-out"
+         />
+        </Link>
       </Box>
+
+      {/* trending shows slider  */}
+      <Box width={["80vw", "80vw", "90vw", "90vw"]} m={"auto"} mt={"5vh"} mb={"30px"}>
+        <Flex flexDirection="column">
+          <Heading color={"brand.text2"}>Trending shows</Heading>
+          <Slider {...settings}>
+            {currentSeries.map((series, index) => (
+              <SeriesWithNumber key={series.id} series={series} index={index} />
+            ))}
+          </Slider>
+        </Flex>
+      </Box>
+
+
+      
     </Box>
   );
 }
